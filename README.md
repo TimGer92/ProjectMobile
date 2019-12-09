@@ -1,2 +1,1 @@
-# ProjectMobile
 Project Mobile Development
