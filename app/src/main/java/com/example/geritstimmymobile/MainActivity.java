@@ -22,6 +22,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+//Dark theme toevoegen
+// Toolbar met menu knop
+
+
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText password;

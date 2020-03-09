@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                             currentUser = mAuth.getCurrentUser();
                             finish();
                             startActivity(new Intent(getApplicationContext(),
-                                    PlayerListActivity.class));
+                                    AddPlayerActivity.class));
 //                            GameActivity nog toevoegen
                         } else {
                             Toast.makeText(LoginActivity.this, "login failed",
