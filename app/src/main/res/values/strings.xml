@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GeritsTimmyMobile</string>
+    <string name="saveCredentials">Save credentials</string>
+    <string name="preferencesEmail">email</string>
+    <string name="preferencesPassword">password</string>
+    <string name="preferencesCheckbox">checkbox</string>
+</resources>
