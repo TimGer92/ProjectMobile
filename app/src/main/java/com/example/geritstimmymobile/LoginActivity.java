@@ -89,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.commit();
                                 editor.putString(getString(R.string.preferencesPassword), loginPassword);
                                 editor.commit();
+                                Log.i(TAG, "Shared Preferences saved");
                             } else {
                                 editor.putString(getString(R.string.preferencesEmail), "");
                                 editor.commit();
@@ -96,12 +97,11 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.commit();
                             }
 
-                            Log.i(TAG, "Shared Preferences saved");
 
                             currentUser = mAuth.getCurrentUser();
                             finish();
-//                            startActivity(new Intent(getApplicationContext(),
-//                                    ProfileActivity.class));
+                            startActivity(new Intent(getApplicationContext(),
+                                    PlayerListActivity.class));
 //                            GameActivity nog toevoegen
                         } else {
                             Toast.makeText(LoginActivity.this, "login failed",

@@ -4,4 +4,17 @@
     <string name="preferencesEmail">email</string>
     <string name="preferencesPassword">password</string>
     <string name="preferencesCheckbox">checkbox</string>
+    <string name="detail_firstname">Voornaam</string>
+    <string name="detail_lastname">Achternaam</string>
+    <string name="detail_birthdate">Geboortedatum</string>
+    <string name="detail_address">Straat + huisnummer</string>
+    <string name="detail_postalCode">Postcode</string>
+    <string name="detail_city">Gemeente</string>
+    <string name="detail_telephone">Telefoonnummer</string>
+    <string name="detail_instrument">Instrument</string>
+    <string name="button_back">Ga terug</string>
+    <string name="button_update">Wijzig</string>
+    <string name="button_delete">Verwijder</string>
+    <string name="dummyData">Dummy</string>
+    <string name="chooseMember">Kies een lid waarvan je de gegevens wilt bekijken.</string>
 </resources>
