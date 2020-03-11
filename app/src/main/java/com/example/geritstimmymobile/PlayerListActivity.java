@@ -81,6 +81,12 @@ public class PlayerListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        // Anders kan app crashen
+        try {
+            menu.findItem(R.id.playerList).setVisible(false);
+        } catch (Exception e) {
+            Log.e(TAG, "MenuItem not found");
+        }
         return true;
     }
 
@@ -98,8 +104,8 @@ public class PlayerListActivity extends AppCompatActivity {
                 }
             case R.id.addPlayer:
                 try {
-                    Intent intent2 = new Intent(this, AddPlayerActivity.class);
-                    this.startActivity(intent2);
+                    Intent intent = new Intent(this, AddPlayerActivity.class);
+                    this.startActivity(intent);
                     return true;
                 } catch (Exception e) {
                     Log.e(TAG, "Error while starting AddPlayerActivity: " + e.getMessage());

@@ -32,21 +32,18 @@ public class GameActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        // Anders kan app crashen
+        try {
+            menu.findItem(R.id.Game).setVisible(false);
+        } catch (Exception e) {
+            Log.e(TAG, "MenuItem not found");
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.Game:
-                try {
-                    Intent intent = new Intent(this, GameActivity.class);
-                    this.startActivity(intent);
-                    return true;
-                } catch (Exception e) {
-                    Log.e(TAG, "Error while starting GameActivity: " + e.getMessage());
-
-                }
             case R.id.addPlayer:
                 try {
                     Intent intent = new Intent(this, AddPlayerActivity.class);
