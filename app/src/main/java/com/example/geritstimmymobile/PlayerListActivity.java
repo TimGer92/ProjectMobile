@@ -1,20 +1,28 @@
 package com.example.geritstimmymobile;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.geritstimmymobile.model.Player;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -36,6 +44,8 @@ public class PlayerListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
     private FirebaseFirestore db;
     private static final String TAG = "PlayerListActivity :::";
     private List<Player> playerList = new ArrayList<>();
@@ -48,6 +58,8 @@ public class PlayerListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_list);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
 
         Log.i(TAG, "SetContent als eerst?");
 
@@ -64,6 +76,42 @@ public class PlayerListActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rv_player_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView, playerList);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.Game:
+                try {
+                    Intent intent = new Intent(this, GameActivity.class);
+                    this.startActivity(intent);
+                    return true;
+                } catch (Exception e) {
+                    Log.e(TAG, "Error while starting GameActivity: " + e.getMessage());
+
+                }
+            case R.id.addPlayer:
+                try {
+                    Intent intent2 = new Intent(this, AddPlayerActivity.class);
+                    this.startActivity(intent2);
+                    return true;
+                } catch (Exception e) {
+                    Log.e(TAG, "Error while starting AddPlayerActivity: " + e.getMessage());
+                }
+            case R.id.Logout:
+                if (user != null) {
+                    mAuth.signOut();
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private boolean checkLandscapeMode() {
