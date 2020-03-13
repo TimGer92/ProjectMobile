@@ -156,7 +156,7 @@ public class AddPlayerActivity extends AppCompatActivity {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationChannel mChannel = new NotificationChannel(
-                channelId, "Test", NotificationManager.IMPORTANCE_HIGH);
+                channelId, "AddPlayerNotification", NotificationManager.IMPORTANCE_HIGH);
         notificationManager.createNotificationChannel(mChannel);
 
 

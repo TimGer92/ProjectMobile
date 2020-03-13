@@ -169,28 +169,4 @@ public class GameActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void showNotification() {
-        Intent notifyIntent = new Intent(GameActivity.this, PlayerListActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(GameActivity.this, 45648, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        NotificationChannel mChannel = new NotificationChannel(
-                channelId, "Test", NotificationManager.IMPORTANCE_HIGH);
-        notificationManager.createNotificationChannel(mChannel);
-
-
-        Notification notification = new Notification.Builder(GameActivity.this)
-                .setContentTitle("Game")
-                .setContentText("Game finished!")
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setChannelId(channelId)
-                .setContentIntent(pendingIntent)
-                .build();
-
-        notificationManager.notify(notifyId, notification);
-    }
 }
