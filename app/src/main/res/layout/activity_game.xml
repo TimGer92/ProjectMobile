@@ -50,6 +50,17 @@
                 android:text="20"
                 android:textSize="90dp" />
 
+            <TextView
+                android:id="@+id/namePlayer1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtLifeCount2p1"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:maxLines="1"
+                android:rotation="180"
+                android:textSize="20dp" />
+
             <ImageButton
                 android:id="@+id/cmdPlusGuest"
                 android:layout_width="40dp"
@@ -80,6 +91,17 @@
             android:layout_below="@+id/layout_center"
             android:background="#CCC2C0"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/namePlayer2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@id/txtLifeCount2p2"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="20"
+                android:textSize="20dp" />
 
             <ImageButton
                 android:id="@+id/cmdPlusHome"

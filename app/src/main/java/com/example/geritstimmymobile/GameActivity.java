@@ -12,6 +12,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +28,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-// nog te implementeren
 public class GameActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -35,7 +35,7 @@ public class GameActivity extends AppCompatActivity {
     public int notifyId = 1;
     public String channelId = "some_channel_id";
     private ImageButton cmdPlus1, cmdPlus2, cmdMin1, cmdMin2, btnReset;
-    private TextView lifePlayer1, lifePlayer2;
+    private TextView lifePlayer1, lifePlayer2, namePlayer1, namePlayer2;
     private Game game;
 
     private static final String TAG = "GameActivity :::";
@@ -43,6 +43,7 @@ public class GameActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         mAuth = FirebaseAuth.getInstance();
@@ -88,14 +89,16 @@ public class GameActivity extends AppCompatActivity {
         btnReset = findViewById(R.id.cmdResetLP);
         lifePlayer1 = findViewById(R.id.txtLifeCount2p1);
         lifePlayer2 = findViewById(R.id.txtLifeCount2p2);
+        namePlayer1 = findViewById(R.id.namePlayer1);
+        namePlayer2 = findViewById(R.id.namePlayer2);
     }
 
     public void setValues(Game game) {
         Log.i(TAG, game.toString());
         lifePlayer1.setText(game.getLifeCount1());
         lifePlayer2.setText(game.getLifeCount2());
-//        player1.setText(game.getNamePlayer1());
-//        player2.setText(game.getNamePlayer2());
+        namePlayer1.setText(game.getNamePlayer1());
+        namePlayer2.setText(game.getNamePlayer2());
 
     }
 
@@ -107,8 +110,8 @@ public class GameActivity extends AppCompatActivity {
         alertDialog.setPositiveButton("Yes", (dialog, which) -> {
             Log.i(TAG, "Reset game confirmed");
             Game newGame = new Game();
-//            newGame.setNamePlayer1(player1.getText().toString());
-//            newGame.setNamePlayer2(player2.getText().toString());
+            newGame.setNamePlayer1(namePlayer1.getText().toString());
+            newGame.setNamePlayer2(namePlayer2.getText().toString());
             setValues(newGame);
         });
 
