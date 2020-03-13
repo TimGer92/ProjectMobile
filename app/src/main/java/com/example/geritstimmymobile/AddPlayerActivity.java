@@ -1,8 +1,17 @@
 package com.example.geritstimmymobile;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,6 +38,8 @@ public class AddPlayerActivity extends AppCompatActivity {
     private Button add_button;
     private String firstName, lastName, gender, playerId;
     private Player player;
+    public int notifyId = 1;
+    public String channelId = "some_channel_id";
     private static final String TAG = "AddPlayer :::";
 
     @Override
@@ -110,6 +121,7 @@ public class AddPlayerActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void savePlayer(String name, String lastName, String gender) {
         CollectionReference dbPlayers = db.collection("players");
         String id = dbPlayers.document().getId();
@@ -118,8 +130,9 @@ public class AddPlayerActivity extends AppCompatActivity {
             dbPlayers.document(playerId).set(player).addOnSuccessListener(documentReference -> {
                 Log.d(TAG, "Player has been updated");
                 Toast.makeText(AddPlayerActivity.this, "Player has been saved", Toast.LENGTH_SHORT).show();
-                Intent intentToDetailsActivity = new Intent(AddPlayerActivity.this, PlayerListActivity.class);
-                startActivity(intentToDetailsActivity);
+//                Intent intentToDetailsActivity = new Intent(AddPlayerActivity.this, PlayerListActivity.class);
+//                startActivity(intentToDetailsActivity);
+                showNotification();
             });
         }
         else {
@@ -127,10 +140,34 @@ public class AddPlayerActivity extends AppCompatActivity {
             dbPlayers.document(id).set(player).addOnSuccessListener(documentReference -> {
                 Log.d(TAG, "Player has been created");
                 Toast.makeText(AddPlayerActivity.this, "Player has been saved", Toast.LENGTH_SHORT).show();
-                Intent intentToDetailsActivity = new Intent(AddPlayerActivity.this, PlayerListActivity.class);
-                startActivity(intentToDetailsActivity);
+//                Intent intentToDetailsActivity = new Intent(AddPlayerActivity.this, PlayerListActivity.class);
+//                startActivity(intentToDetailsActivity);
+                  showNotification();
             });
         }
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void showNotification() {
+        Intent notifyIntent = new Intent(AddPlayerActivity.this, PlayerListActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(AddPlayerActivity.this, 45648, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationChannel mChannel = new NotificationChannel(
+                channelId, "Test", NotificationManager.IMPORTANCE_HIGH);
+        notificationManager.createNotificationChannel(mChannel);
+
+
+        Notification notification = new Notification.Builder(AddPlayerActivity.this)
+                .setContentTitle("Player")
+                .setContentText("Player has been added!")
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setChannelId(channelId)
+                .setContentIntent(pendingIntent)
+                .build();
+
+        notificationManager.notify(notifyId, notification);
     }
 }
