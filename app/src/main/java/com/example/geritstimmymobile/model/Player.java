@@ -11,7 +11,8 @@ public class Player {
 
     }
 
-    public Player (String firstname, String lastname, String gender) {
+    public Player (String playerId,String firstname, String lastname, String gender) {
+        this.playerId = playerId;
         this.firstname = firstname;
         this.lastname = lastname;
         this.gender = gender;

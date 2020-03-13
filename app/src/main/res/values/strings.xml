@@ -11,11 +11,10 @@
     <string name="button_back">Back</string>
     <string name="button_update">Update</string>
     <string name="button_delete">Delete</string>
-    <string name="button_save">Add player</string>
+    <string name="button_save">Save player</string>
     <string name="choosePlayer">Choose player to see details</string>
     <string name="search">Search</string>
 
-    <!-- Navigation Menu -->
     <string name="menu_home">Home</string>
     <string name="menu_show_members">Players</string>
     <string name="menu_add_member">Add player</string>

@@ -27,7 +27,7 @@
         app:layoutManager="LinearLayoutManager"
         tools:context=".PlayerListActivity"
         tools:listitem="@layout/player_list_content" />
-    <!-- Ieder item wordt gevuld met member_list_content -->
+    <!-- Ieder item wordt gevuld met player_list_content -->
 
     <!-- Hier worden de details getoond -->
     <FrameLayout
@@ -42,7 +42,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:text="@string/chooseMember" />
+            android:text="@string/choosePlayer" />
 
     </FrameLayout>
 

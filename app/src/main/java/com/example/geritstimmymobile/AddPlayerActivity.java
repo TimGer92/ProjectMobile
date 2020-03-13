@@ -1,11 +1,7 @@
 package com.example.geritstimmymobile;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationManagerCompat;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,9 +17,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Objects;
-
-// Nog te implementeren
 public class AddPlayerActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -34,9 +27,8 @@ public class AddPlayerActivity extends AppCompatActivity {
     private EditText editGender;
 
     private Button add_button;
-    private String firstName;
-    private String lastName;
-    private String gender;
+    private String firstName, lastName, gender, playerId;
+    private Player player;
     private static final String TAG = "AddPlayer :::";
 
     @Override
@@ -46,12 +38,21 @@ public class AddPlayerActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        setTitle("Add Player");
 
         editFirstName = findViewById(R.id.firstname);
         editLastName = findViewById(R.id.lastname);
         editGender = findViewById(R.id.gender);
-
         add_button = findViewById(R.id.add_player);
+
+        playerId = getIntent().getStringExtra("playerId");
+        firstName = getIntent().getStringExtra("firstname");
+        lastName = getIntent().getStringExtra("lastname");
+        gender = getIntent().getStringExtra("gender");
+
+        editFirstName.setText(firstName);
+        editLastName.setText(lastName);
+        editGender.setText(gender);
 
         Log.d(TAG, "OnCreate: AddPlayerActivity rendered successfully");
 
@@ -61,7 +62,7 @@ public class AddPlayerActivity extends AppCompatActivity {
                 firstName = editFirstName.getText().toString().trim();
                 lastName = editLastName.getText().toString().trim();
                 gender = editGender.getText().toString().trim();
-                addPlayer(firstName, lastName, gender);
+                savePlayer(firstName, lastName, gender);
                 // hier notificatie toevoegen
             }
         });
@@ -109,16 +110,27 @@ public class AddPlayerActivity extends AppCompatActivity {
         }
     }
 
-    public void addPlayer(String name, String lastName, String gender) {
+    public void savePlayer(String name, String lastName, String gender) {
         CollectionReference dbPlayers = db.collection("players");
         String id = dbPlayers.document().getId();
-        Player newPlayer = new Player(name, lastName, gender);
-        newPlayer.setPlayerId(id);
-        dbPlayers.document(id).set(newPlayer).addOnSuccessListener(documentReference -> {
-            Log.d(TAG, "Player has been added");
-            Toast.makeText(AddPlayerActivity.this, "Player has been added", Toast.LENGTH_SHORT).show();
-            Intent intentToDetailsActivity = new Intent(AddPlayerActivity.this, PlayerListActivity.class);
-            startActivity(intentToDetailsActivity);
-        });
+        if (playerId != null) {
+            player = new Player(playerId, name, lastName, gender);
+            dbPlayers.document(playerId).set(player).addOnSuccessListener(documentReference -> {
+                Log.d(TAG, "Player has been updated");
+                Toast.makeText(AddPlayerActivity.this, "Player has been saved", Toast.LENGTH_SHORT).show();
+                Intent intentToDetailsActivity = new Intent(AddPlayerActivity.this, PlayerListActivity.class);
+                startActivity(intentToDetailsActivity);
+            });
+        }
+        else {
+            player = new Player(id, name,lastName, gender);
+            dbPlayers.document(id).set(player).addOnSuccessListener(documentReference -> {
+                Log.d(TAG, "Player has been created");
+                Toast.makeText(AddPlayerActivity.this, "Player has been saved", Toast.LENGTH_SHORT).show();
+                Intent intentToDetailsActivity = new Intent(AddPlayerActivity.this, PlayerListActivity.class);
+                startActivity(intentToDetailsActivity);
+            });
+        }
+
     }
 }

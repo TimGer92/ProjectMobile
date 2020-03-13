@@ -1,9 +1,12 @@
 package com.example.geritstimmymobile;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -11,9 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.geritstimmymobile.model.Player;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,9 +28,12 @@ import com.example.geritstimmymobile.model.Player;
  */
 public class PlayerDetailFragment extends Fragment {
     private Player player;
-    private TextView tvFirstname, tvLastname, tvBirthdate, tvAddress;
+    private TextView tvFirstname, tvLastname, tvGender;
     private Button btnUpdate, btnDelete;
-    private static final String TAG =  "PlayerDetailFragment";
+    private ImageView playerIcon;
+    private FirebaseFirestore db;
+
+    private static final String TAG = "PlayerDetailFragment";
 
     public PlayerDetailFragment() {
     }
@@ -32,6 +41,8 @@ public class PlayerDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = FirebaseFirestore.getInstance();
+
     }
 
     @Override
@@ -42,7 +53,7 @@ public class PlayerDetailFragment extends Fragment {
         init(rootView);
         Log.i(TAG, "Initialized successfully");
 
-        initializeMember();
+        initializePlayer();
         Log.i(TAG, "Player initialized successfully");
 
         if (player != null) {
@@ -50,8 +61,14 @@ public class PlayerDetailFragment extends Fragment {
             Log.i(TAG, "Fields filled successfully");
         }
 
-//        btnUpdate.setOnClickListener(this);
-//        btnDelete.setOnClickListener(this);
+        btnUpdate.setOnClickListener(v -> {
+            Log.i(TAG, "Update-button clicked");
+            updatePlayer(v);
+        });
+        btnDelete.setOnClickListener(v -> {
+            Log.i(TAG, "Delete-button clicked");
+            createDeleteDialog(player.getPlayerId());
+        });
 
         return rootView;
     }
@@ -59,28 +76,81 @@ public class PlayerDetailFragment extends Fragment {
     private void init(View view) {
         tvFirstname = view.findViewById(R.id.firstname_database);
         tvLastname = view.findViewById(R.id.lastname_database);
-        tvBirthdate = view.findViewById(R.id.birthdate_database);
-        tvAddress = view.findViewById(R.id.address_database);
+        tvGender = view.findViewById(R.id.gender_database);
+        btnUpdate = view.findViewById(R.id.btnUpdate);
+        btnDelete = view.findViewById(R.id.btnDelete);
+        playerIcon = view.findViewById(R.id.ivProfilePicture);
     }
 
-    private void initializeMember() {
+    private void initializePlayer() {
         player = new Player();
 
-        // Member initializeren met gegevens afkomstig van MemberListActivity
+        // Player initializeren met gegevens afkomstig van MemberListActivity
         player.setPlayerId(getArguments().getString("playerId"));
         player.setFirstname(getArguments().getString("firstname"));
         player.setLastname(getArguments().getString("lastname"));
-        player.setBirthdate(getArguments().getString("birthdate"));
-        player.setAddress(getArguments().getString("address"));
+        player.setGender(getArguments().getString("gender"));
     }
 
     private void fillFieldsWithData() {
-        // Velden vullen met de (geïnitialiseerde) waarden van de aangemaakte member hier
+        // Velden vullen met de (geïnitialiseerde) waarden van de aangemaakte player hier
         tvFirstname.setText(player.getFirstname());
         tvLastname.setText(player.getLastname());
-        tvBirthdate.setText(player.getBirthdate());
-        tvAddress.setText(player.getAddress());
+        tvGender.setText(player.getGender());
 
-//        fillImageView();
+        fillImageView();
+    }
+
+    private void fillImageView() {
+        String gender = player.getGender();
+        switch(gender) {
+            case "Female":
+                playerIcon.setImageResource(R.drawable.lilana);
+                return;
+            case "Male":
+                playerIcon.setImageResource(R.drawable.jace);
+                return;
+            default:
+                playerIcon.setImageResource(R.drawable.mtg);
+                return;
+        }
+    }
+
+    private void updatePlayer(View v) {
+        Intent intent = new Intent(this.getContext(), AddPlayerActivity.class);
+
+        intent.putExtra("playerId", player.getPlayerId());
+        intent.putExtra("firstname", player.getFirstname());
+        intent.putExtra("lastname", player.getLastname());
+        intent.putExtra("gender", player.getGender());
+
+        startActivity(intent);
+    }
+
+    private void createDeleteDialog(String playerId) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setMessage("Are you sure to delete " + player.getFirstname() + "?");
+        alertDialog.setCancelable(false);
+
+        alertDialog.setPositiveButton("Yes", (dialog, which) -> {
+            Log.i(TAG, "Delete player confirmed");
+
+            deletePlayer(playerId);
+        });
+
+        alertDialog.setNegativeButton("No", (dialog, which) -> Log.i(TAG, "Delete player denied"));
+
+        alertDialog.create().show();
+    }
+
+    private void deletePlayer(String playerId) {
+        Log.i(TAG, playerId);
+        db.collection("players").document(playerId).delete()
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "Player has been deleted");
+                    Toast.makeText(getContext(), "Player has been deleted", Toast.LENGTH_LONG).show();
+                    Intent intentToDetailsActivity = new Intent(getContext(), PlayerListActivity.class);
+                    startActivity(intentToDetailsActivity);
+                });
     }
 }

@@ -2,8 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/Game"
         android:title="LifeCounter" />
-    <item
-        android:id="@+id/playerList"
+    <item android:id="@+id/playerList"
         android:title="Players" />
     <item android:id="@+id/addPlayer"
         android:title="Add Player" />

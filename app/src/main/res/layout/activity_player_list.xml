@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".PlayerListActivity">
 
-    <!-- DIT IS DE LIJST WAAR EEN RECYCLERVIEW IN STAAT WAAR MEMBERS IN STAAN -->
+    <!-- DIT IS DE LIJST WAAR EEN RECYCLERVIEW IN STAAT WAAR PLAYERS IN STAAN -->
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/frameLayoutForRecyclerView">
 
-        <!-- Dit is een RecyclerView gevuld met members -->
+        <!-- Dit is een RecyclerView gevuld met players -->
         <include layout="@layout/player_list"/>
 
     </FrameLayout>

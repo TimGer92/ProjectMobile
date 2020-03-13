@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -25,6 +29,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,9 +67,6 @@ public class PlayerListActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        Log.i(TAG, "SetContent als eerst?");
-
-//        nog als variabele meegeven
         setTitle("Players");
 
         if (checkLandscapeMode()) {
@@ -76,6 +79,7 @@ public class PlayerListActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rv_player_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView, playerList);
+        Log.i(TAG, "OnCreate finished");
     }
 
     @Override
@@ -159,6 +163,8 @@ public class PlayerListActivity extends AppCompatActivity {
         private final PlayerListActivity mParentActivity;
         private final List<Player> players;
         private final boolean mTwoPane;
+        private StorageReference storageReference;
+
 
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
@@ -169,8 +175,7 @@ public class PlayerListActivity extends AppCompatActivity {
                     arguments.putString("playerId", player.getPlayerId());
                     arguments.putString("firstname", player.getFirstname());
                     arguments.putString("lastname", player.getLastname());
-                    arguments.putString("birthdate", player.getBirthdate());
-                    arguments.putString("address", player.getAddress());
+                    arguments.putString("gender", player.getGender());
 
                     PlayerDetailFragment fragment = new PlayerDetailFragment();
                     fragment.setArguments(arguments);
@@ -181,10 +186,9 @@ public class PlayerListActivity extends AppCompatActivity {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, PlayerDetailActivity.class);
                     intent.putExtra("playerId", player.getPlayerId());
-                    intent.putExtra("firsname", player.getFirstname());
+                    intent.putExtra("firstname", player.getFirstname());
                     intent.putExtra("lastname", player.getLastname());
-                    intent.putExtra("birthdate", player.getBirthdate());
-                    intent.putExtra("address", player.getAddress());
+                    intent.putExtra("gender", player.getGender());
 
                     context.startActivity(intent);
                 }
@@ -201,6 +205,7 @@ public class PlayerListActivity extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            storageReference = FirebaseStorage.getInstance().getReference();
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.player_list_content, parent, false);
             return new ViewHolder(view);
@@ -211,8 +216,35 @@ public class PlayerListActivity extends AppCompatActivity {
             String name = players.get(position).getFirstname() + " " + players.get(position).getLastname();
             holder.tvName.setText(name);
 
+            String imageName = "gs://mtglifecounter-2f06e.appspot.com/hhnBhigdJLF92Nw2hm9CC";
+
             holder.itemView.setTag(players.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
+            try {
+//                if (imageName != null) {
+//                    final long ONE_MEGABYTE = 1024 * 1024;
+////                    this.storageReference.child(imageName).getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
+////                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+////                        holder.playerIcon.setImageBitmap(bitmap);
+////                    });
+//                }
+//                Uri filePath = Uri.parse("android.resource://"+ R.class.getPackage().getName()+"/" + R.drawable.mtg);
+                String gender = players.get(position).getGender();
+                switch(gender) {
+                    case "Female":
+                        holder.playerIcon.setImageResource(R.drawable.lilana);
+                        return;
+                    case "Male":
+                        holder.playerIcon.setImageResource(R.drawable.jace);
+                        return;
+                    default:
+                        holder.playerIcon.setImageResource(R.drawable.mtg);
+                        return;
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
 
             Log.i(TAG, "View within RecyclerViewList created successfully");
         }
@@ -223,11 +255,13 @@ public class PlayerListActivity extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView tvName;
+            TextView tvName;
+            ImageView playerIcon;
 
             ViewHolder(View view) {
                 super(view);
                 tvName = view.findViewById(R.id.tv_member_name);
+                playerIcon = view.findViewById(R.id.ivProfilePicture);
             }
         }
     }
