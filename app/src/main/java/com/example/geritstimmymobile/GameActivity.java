@@ -34,7 +34,7 @@ public class GameActivity extends AppCompatActivity {
     private FirebaseUser user;
     public int notifyId = 1;
     public String channelId = "some_channel_id";
-    private ImageButton cmdPlus1, cmdPlus2, cmdMin1, cmdMin2, btnReset;
+    private ImageButton cmdPlus1, cmdPlus2, cmdMin1, cmdMin2, btnReset, btnPlayers;
     private TextView lifePlayer1, lifePlayer2, namePlayer1, namePlayer2;
     private Game game;
 
@@ -56,28 +56,36 @@ public class GameActivity extends AppCompatActivity {
             int life = Integer.parseInt(lifePlayer1.getText().toString());
             int total = life + 1;
             lifePlayer1.setText(Integer.toString(total));
+            Log.i(TAG, "Set life total of player to: " + total);
         });
 
         cmdPlus2.setOnClickListener(v -> {
             int life = Integer.parseInt(lifePlayer2.getText().toString());
             int total = life + 1;
             lifePlayer2.setText(Integer.toString(total));
+            Log.i(TAG, "Set life total of player to: " + total);
         });
 
         cmdMin1.setOnClickListener(v -> {
             int life = Integer.parseInt(lifePlayer1.getText().toString());
             int total = life - 1;
             lifePlayer1.setText(Integer.toString(total));
+            Log.i(TAG, "Set life total of player to: " + total);
         });
 
         cmdMin2.setOnClickListener(v -> {
             int life = Integer.parseInt(lifePlayer2.getText().toString());
             int total = life - 1;
             lifePlayer2.setText(Integer.toString(total));
+            Log.i(TAG, "Set life total of player to: " + total);
         });
 
         btnReset.setOnClickListener(v -> {
             createDialog();
+        });
+
+        btnPlayers.setOnClickListener(view -> {
+            Log.i(TAG, "SetPlayersButton clicked");
         });
     }
 
@@ -87,6 +95,7 @@ public class GameActivity extends AppCompatActivity {
         cmdMin1 = findViewById(R.id.cmdMinusGuest);
         cmdMin2 = findViewById(R.id.cmdMinusHome);
         btnReset = findViewById(R.id.cmdResetLP);
+        btnPlayers = findViewById(R.id.cmdSetPlayers);
         lifePlayer1 = findViewById(R.id.txtLifeCount2p1);
         lifePlayer2 = findViewById(R.id.txtLifeCount2p2);
         namePlayer1 = findViewById(R.id.namePlayer1);
