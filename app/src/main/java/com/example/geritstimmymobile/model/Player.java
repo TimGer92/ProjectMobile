@@ -4,23 +4,24 @@ public class Player {
     private String playerId;
     private String firstname;
     private String lastname;
-    private String birthdate;
+    private String gender;
     private String address;
 
     public Player() {
 
     }
 
-    public Player (String firstname, String lastname) {
+    public Player (String firstname, String lastname, String gender) {
         this.firstname = firstname;
         this.lastname = lastname;
+        this.gender = gender;
     }
 
     public String getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(String memberId) {
+    public void setPlayerId(String playerId) {
         this.playerId = playerId;
     }
 
@@ -40,12 +41,12 @@ public class Player {
         this.lastname = lastname;
     }
 
-    public String getBirthdate() {
-        return birthdate;
+    public String getGender() {
+        return gender;
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getAddress() {

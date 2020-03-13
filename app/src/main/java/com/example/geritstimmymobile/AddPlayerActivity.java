@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.geritstimmymobile.model.Player;
@@ -28,27 +29,40 @@ public class AddPlayerActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
 
+    private EditText editFirstName;
+    private EditText editLastName;
+    private EditText editGender;
+
     private Button add_button;
-    private String name;
+    private String firstName;
     private String lastName;
+    private String gender;
     private static final String TAG = "AddPlayer :::";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_player);
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-//        userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
+        editFirstName = findViewById(R.id.firstname);
+        editLastName = findViewById(R.id.lastname);
+        editGender = findViewById(R.id.gender);
+
         add_button = findViewById(R.id.add_player);
-        db = FirebaseFirestore.getInstance();
+
+        Log.d(TAG, "OnCreate: AddPlayerActivity rendered successfully");
 
         // Notificatie tonen wanneer speler is toegevoegd
         add_button.setOnClickListener(v -> {
-            name = "Test-Naam";
-            lastName = "Test-achternaam";
             if (v == add_button) {
-                addPlayer(name, lastName);
+                firstName = editFirstName.getText().toString().trim();
+                lastName = editLastName.getText().toString().trim();
+                gender = editGender.getText().toString().trim();
+                addPlayer(firstName, lastName, gender);
+                // hier notificatie toevoegen
             }
         });
     }
@@ -95,12 +109,16 @@ public class AddPlayerActivity extends AppCompatActivity {
         }
     }
 
-    public void addPlayer(String name, String lastName) {
+    public void addPlayer(String name, String lastName, String gender) {
         CollectionReference dbPlayers = db.collection("players");
-        Player newPlayer = new Player(name, lastName);
-        dbPlayers.add(newPlayer).addOnSuccessListener(documentReference -> {
+        String id = dbPlayers.document().getId();
+        Player newPlayer = new Player(name, lastName, gender);
+        newPlayer.setPlayerId(id);
+        dbPlayers.document(id).set(newPlayer).addOnSuccessListener(documentReference -> {
             Log.d(TAG, "Player has been added");
             Toast.makeText(AddPlayerActivity.this, "Player has been added", Toast.LENGTH_SHORT).show();
+            Intent intentToDetailsActivity = new Intent(AddPlayerActivity.this, PlayerListActivity.class);
+            startActivity(intentToDetailsActivity);
         });
     }
 }
