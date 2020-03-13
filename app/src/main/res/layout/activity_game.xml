@@ -1,11 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GameActivity">
 
-<!-- nog te implementeren -->
+    <RelativeLayout
+        android:id="@+id/rlActivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <!--        center-->
+        <RelativeLayout
+            android:id="@+id/layout_center"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:background="#161618"
+            android:orientation="vertical">
+
+            <!-- Reset-Button -->
+            <ImageButton
+                android:id="@+id/cmdResetLP"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/icon_reload" />
+
+
+        </RelativeLayout>
+        <!--top-->
+        <RelativeLayout
+            android:id="@+id/rl2Player1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/layout_center"
+            android:background="#CCC2C0"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtLifeCount2p1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:maxLines="1"
+                android:rotation="180"
+                android:text="20"
+                android:textSize="90dp" />
+
+            <ImageButton
+                android:id="@+id/cmdPlusGuest"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignBottom="@id/txtLifeCount2p1"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="45dp"
+                android:layout_toStartOf="@id/txtLifeCount2p1"
+                android:layout_toLeftOf="@id/txtLifeCount2p1"
+                android:background="@drawable/icon_plus" />
+
+            <ImageButton
+                android:id="@+id/cmdMinusGuest"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignBottom="@id/txtLifeCount2p1"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="45dp"
+                android:layout_toEndOf="@+id/txtLifeCount2p1"
+                android:layout_toRightOf="@+id/txtLifeCount2p1"
+                android:background="@drawable/icon_minus" />
+        </RelativeLayout>
+        <!--bottom-->
+        <RelativeLayout
+            android:id="@+id/rl2Player2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/layout_center"
+            android:background="#CCC2C0"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/cmdPlusHome"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignTop="@id/txtLifeCount2p2"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="45dp"
+                android:layout_toEndOf="@id/txtLifeCount2p2"
+                android:layout_toRightOf="@id/txtLifeCount2p2"
+                android:background="@drawable/icon_plus" />
+
+            <ImageButton
+                android:id="@+id/cmdMinusHome"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignTop="@id/txtLifeCount2p2"
+                android:layout_marginTop="45dp"
+                android:layout_marginRight="20dp"
+                android:layout_toStartOf="@id/txtLifeCount2p2"
+                android:layout_toLeftOf="@id/txtLifeCount2p2"
+                android:background="@drawable/icon_minus" />
+
+            <TextView
+                android:id="@+id/txtLifeCount2p2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="20"
+                android:textSize="90dp" />
+        </RelativeLayout>
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
